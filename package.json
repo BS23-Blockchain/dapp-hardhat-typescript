@@ -1,8 +1,7 @@
 {
-  "name": "crypto-zombies-contracts",
+  "name": "dapp-hardhat-typescript",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Hardhat Typescript Template for DApps",
   "scripts": {
     "compile": "hardhat compile",
     "deploy:hardhat": "hardhat run ./scripts/deploy.ts",
@@ -27,6 +26,7 @@
     "hardhat-gas-reporter": "^1.0.6",
     "mocha": "^9.1.3",
     "solc": "^0.8.9",
+    "solc-0.8.9": "npm:solc@^0.8.9",
     "solidity-coverage": "^0.7.17",
     "ts-node": "^10.4.0",
     "typechain": "^6.0.5",

@@ -16,24 +16,24 @@ import { TaskArguments } from "hardhat/types";
 dotenv.config();
 
 const installSolcJs = (version: string) => {
-  console.log(`installing correct solc version: ${version}`);
-  execSync(`npm i -D solc@${version}`, { stdio: [0, 1, 2] });
+  console.log(`installing solc@${version}`);
+  execSync(`npm i -D solc-${version}@npm:solc@${version}`, { stdio: [0, 1, 2] });
   execSync(`npm audit fix`, { stdio: [0, 1, 2] });
 };
 
 // Overriding the solidity compiler configuration task
 task(TASK_COMPILE_SOLIDITY_GET_SOLC_BUILD, async (args: TaskArguments, hre, runSuper) => {
   // check if solc with that version is installed
-  const solcPath = path.join(__dirname, "node_modules", "solc");
+  const solcPath = path.join(__dirname, "node_modules", `solc-${args.solcVersion}`);
   if (fs.existsSync(solcPath)) {
     // if not installed update the solc version by running npm
-    const solc: { version: string } = JSON.parse(fs.readFileSync(path.join(solcPath, "package.json"), "utf8"));
-    console.log(`found solc version: ${solc.version}`);
-    if (solc.version !== args.solcVersion) {
-      installSolcJs(args.solcVersion);
-    }
+    // const solc: { version: string } = JSON.parse(fs.readFileSync(path.join(solcPath, "package.json"), "utf8"));
+    console.log(`found solc@${args.solcVersion}`);
+    // if (solc.version !== args.solcVersion) {
+    //   installSolcJs(args.solcVersion);
+    // }
   } else {
-    console.log(`didn't found solc`);
+    console.log(`didn't found solc@${args.solcVersion}`);
     installSolcJs(args.solcVersion);
   }
 
@@ -61,9 +61,8 @@ const NETWORKS = Object.fromEntries(
 );
 
 const config: HardhatUserConfig = {
-  // Currently supports only a single solidity version
   solidity: {
-    version: "0.8.9",
+    compilers: [{ version: "0.8.9" }],
   },
   networks: NETWORKS,
   // create a separate file for mocha config
