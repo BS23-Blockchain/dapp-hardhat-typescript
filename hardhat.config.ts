@@ -22,7 +22,7 @@ const installSolcJs = (version: string) => {
 };
 
 // Overriding the solidity compiler configuration task
-task(TASK_COMPILE_SOLIDITY_GET_SOLC_BUILD, async (args: TaskArguments, hre, runSuper) => {
+task(TASK_COMPILE_SOLIDITY_GET_SOLC_BUILD, async (args: TaskArguments) => {
   // check if solc with that version is installed
   const solcPath = path.join(__dirname, "node_modules", `solc-${args.solcVersion}`);
   if (fs.existsSync(solcPath)) {
@@ -64,7 +64,7 @@ const config: HardhatUserConfig = {
   solidity: {
     compilers: [{ version: "0.8.9" }],
   },
-  networks: NETWORKS,
+  networks: { hardhat: {}, ...NETWORKS },
   // create a separate file for mocha config
   mocha: {
     timeout: 50000,
