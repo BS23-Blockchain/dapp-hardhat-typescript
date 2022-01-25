@@ -1,6 +1,7 @@
 import * as dotenv from "dotenv";
 import path from "path";
 import fs from "fs";
+import { sync } from "glob";
 import { execSync } from "child_process";
 
 import { HardhatUserConfig, task } from "hardhat/config";
@@ -10,7 +11,7 @@ import "@typechain/hardhat";
 import "hardhat-gas-reporter";
 import "solidity-coverage";
 
-import { TASK_COMPILE_SOLIDITY_GET_SOLC_BUILD } from "hardhat/builtin-tasks/task-names";
+import { TASK_COMPILE_SOLIDITY_GET_SOLC_BUILD, TASK_TEST_GET_TEST_FILES } from "hardhat/builtin-tasks/task-names";
 import { TaskArguments } from "hardhat/types";
 
 dotenv.config();
@@ -44,6 +45,12 @@ task(TASK_COMPILE_SOLIDITY_GET_SOLC_BUILD, async (args: TaskArguments) => {
     isSolcJs: true,
     version: args.solcVersion,
   };
+});
+
+// Overriding task get test files
+task(TASK_TEST_GET_TEST_FILES, async () => {
+  const overriddenTestFiles = sync("tests/**/*.test.ts");
+  return overriddenTestFiles;
 });
 
 // You need to export an object to set up your config
